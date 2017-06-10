@@ -32,7 +32,7 @@ public class TIQUETICO {
         //ControladorLogin login =new ControladorLogin();
         //boolean rest=ControladorLogin.peticionConectarEmpleado("Joaquin", "1234");
         //System.out.println(rest);
-        //ControladorCliente.peticionReservarTicket("jmena", "T00");
+        ControladorCliente.peticionSolicitarTicket("VERDE");
         
     }
     

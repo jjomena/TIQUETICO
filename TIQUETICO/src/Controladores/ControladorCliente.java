@@ -17,7 +17,7 @@ public class ControladorCliente {
         String sentencia;
         sentencia = "SOLICITAR_TICKETS ["+COLOR+"]";
         String respuesta="SOLICITAR_TICKET [COLOR#numTicket<problem<idCliente<"
-                + "fechaIngreso-numTicket<problem<idCliente<fechaIngreso-numTicket<"
+                + "fechaIngreso/numTicket<problem<idCliente<fechaIngreso/numTicket<"
                 + "problem<idCliente<fechaIngreso]"; //AQUI VA EL METODO QUE ENVIA AL SERVIDOR, esto es un ejemplo como se espera respuesta
         boolean bandera=false;
         //
@@ -27,8 +27,9 @@ public class ControladorCliente {
             if('#' ==car){
                 bandera=!bandera; 
                 cadena =respuesta.substring(i+1, respuesta.length()-1);
-                String[] words=cadena.split("-");
+                String[] words=cadena.split("/");
                 for(String w:words){
+                    System.out.println(w);
                     informacionSolicitarTicket(w);
                 }
                 break;
@@ -155,9 +156,9 @@ public class ControladorCliente {
         sentencia = "REPORTE_TICKET ["+idUsuario+"]";
         String respuesta = "REPORTE_TICKET [idTicket<idCliente<asunto<ingresoTicket<"
                 + "inicioAtencionTicket<tiempoResolucion<categoría<comentario<"
-                + "estado-idTicket<idCliente<asunto<ingresoTicket<"
+                + "estado/idTicket<idCliente<asunto<ingresoTicket<"
                 + "inicioAtencionTicket<tiempoResolucion<categoría<comentario<"
-                + "estado-idTicket<idCliente<asunto<ingresoTicket<inicioAtencionTicket<"
+                + "estado/idTicket<idCliente<asunto<ingresoTicket<inicioAtencionTicket<"
                 + "tiempoResolucion<categoría<comentario<estado]";
         boolean bandera=false;
         //
@@ -167,7 +168,7 @@ public class ControladorCliente {
             if('[' ==car){
                 bandera=!bandera; 
                 cadena =respuesta.substring(i+1, respuesta.length()-1);
-                String[] words=cadena.split("-");
+                String[] words=cadena.split("/");
                 for(String w:words){
                     informacionReporteTicket(w);
                 }
