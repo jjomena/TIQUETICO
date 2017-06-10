@@ -51,7 +51,7 @@ public class PanelCliente extends javax.swing.JFrame {
         return INSTANCE;
     }
     
-    
+    /*Permite agregar el nombre del Usuario que se logeo en la aplicacion*/
     public void agregarUsuario(String usuario){
         txtNombreUsuario.setText(usuario);
     }
@@ -304,18 +304,18 @@ public class PanelCliente extends javax.swing.JFrame {
                                 .addGap(176, 176, 176)
                                 .addComponent(btnAtenderTicket))
                             .addGroup(TabPendientesLayout.createSequentialGroup()
-                                .addGap(38, 38, 38)
+                                .addGap(80, 80, 80)
                                 .addComponent(PanelDatos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addContainerGap(239, Short.MAX_VALUE))
+                .addContainerGap(197, Short.MAX_VALUE))
         );
         TabPendientesLayout.setVerticalGroup(
             TabPendientesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(TabPendientesLayout.createSequentialGroup()
                 .addGroup(TabPendientesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(TabPendientesLayout.createSequentialGroup()
-                        .addGap(40, 40, 40)
+                        .addGap(52, 52, 52)
                         .addComponent(PanelDatos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnAtenderTicket, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(TabPendientesLayout.createSequentialGroup()
                         .addGap(28, 28, 28)
