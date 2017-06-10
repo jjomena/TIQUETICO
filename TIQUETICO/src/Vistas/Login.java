@@ -168,6 +168,7 @@ public class Login extends javax.swing.JFrame {
             PanelCliente cliente = PanelCliente.getInstance();
             cliente.agregarUsuario(usuario);
             cliente.consultarTickets("VERDE");
+            cliente.consultarReportes(usuario);
             cliente.show();
             
         }

@@ -1,5 +1,7 @@
 package Vistas;
 
+import Controladores.ControladorConexion;
+
 public class Conectar extends javax.swing.JFrame {
     private String dirrecion;
     private String puerto;
@@ -183,6 +185,7 @@ public class Conectar extends javax.swing.JFrame {
 
         dirrecion = txtDireccion.getText();
         puerto = txtPuerto.getText();
+        ControladorConexion.conectarServidor(dirrecion, puerto);
     }//GEN-LAST:event_btnConectarActionPerformed
 
     /**

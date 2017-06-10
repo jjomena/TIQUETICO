@@ -29,7 +29,6 @@ public class ControladorCliente {
                 cadena =respuesta.substring(i+1, respuesta.length()-1);
                 String[] words=cadena.split("/");
                 for(String w:words){
-                    System.out.println(w);
                     informacionSolicitarTicket(w);
                 }
                 break;

@@ -83,7 +83,6 @@ public class PanelCliente extends javax.swing.JFrame {
         txtPendienteAsunto = new javax.swing.JLabel();
         txtPendienteIngreso = new javax.swing.JLabel();
         btnAtenderTicket = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
         TabAtendiendo = new javax.swing.JPanel();
         PanelFormAtendiendo = new javax.swing.JPanel();
         labelTicketId = new javax.swing.JLabel();
@@ -289,47 +288,33 @@ public class PanelCliente extends javax.swing.JFrame {
             }
         });
 
-        jButton2.setText("jButton2");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout TabPendientesLayout = new javax.swing.GroupLayout(TabPendientes);
         TabPendientes.setLayout(TabPendientesLayout);
         TabPendientesLayout.setHorizontalGroup(
             TabPendientesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(TabPendientesLayout.createSequentialGroup()
+                .addGap(34, 34, 34)
+                .addComponent(ScrollPanePendientes, javax.swing.GroupLayout.PREFERRED_SIZE, 429, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(TabPendientesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(TabPendientesLayout.createSequentialGroup()
-                        .addGap(34, 34, 34)
-                        .addComponent(ScrollPanePendientes, javax.swing.GroupLayout.PREFERRED_SIZE, 429, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGroup(TabPendientesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(TabPendientesLayout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(PanelDatos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(TabPendientesLayout.createSequentialGroup()
-                                .addGap(54, 54, 54)
-                                .addComponent(btnAtenderTicket))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(PanelDatos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(TabPendientesLayout.createSequentialGroup()
-                        .addGap(289, 289, 289)
-                        .addComponent(jButton2)))
+                        .addGap(54, 54, 54)
+                        .addComponent(btnAtenderTicket)))
                 .addContainerGap(242, Short.MAX_VALUE))
         );
         TabPendientesLayout.setVerticalGroup(
             TabPendientesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(TabPendientesLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jButton2)
-                .addGap(7, 7, 7)
+                .addGap(41, 41, 41)
                 .addGroup(TabPendientesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(ScrollPanePendientes)
                     .addGroup(TabPendientesLayout.createSequentialGroup()
                         .addComponent(PanelDatos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(42, 42, 42)
                         .addComponent(btnAtenderTicket, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(0, 46, Short.MAX_VALUE)))
                 .addContainerGap())
         );
 
@@ -684,16 +669,6 @@ public class PanelCliente extends javax.swing.JFrame {
         mensajeTicketResuelto();
     }//GEN-LAST:event_btnResueltoActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
-        refrescarPanelTicketsPendientes("T00","Computadora no enciende",
-                "CL:001","06/06/2017",Categorias.AMARILLO);
-        refrescarPanelTicketsPendientes("T01","Problemas de internet",
-                "CL:002","06/06/2017",Categorias.ROJO);
-        refrescarPanelTicketsPendientes("T002","Monitor no enciende",
-                "CL:003","06/06/2017",Categorias.VERDE);
-    }//GEN-LAST:event_jButton2ActionPerformed
-
     private void btnAtenderTicketActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAtenderTicketActionPerformed
         // Boton en el que el usuario solicita reservar un ticket para ser atendido
         String usuario = txtNombreUsuario.getText();
@@ -703,7 +678,7 @@ public class PanelCliente extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAtenderTicketActionPerformed
 
     private void btnDesconectarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDesconectarActionPerformed
-        // TODO add your handling code here:
+        //Envia solicitud para abandonar la conexion con el servidor
         String idUsuario=txtNombreUsuario.getText();
         boolean ejecutar=ControladorCliente.peticionCerrarConexion(idUsuario);
         if(ejecutar){
@@ -731,6 +706,7 @@ public class PanelCliente extends javax.swing.JFrame {
         JOptionPane.showMessageDialog(parent, "El ticket "+ticket+ " ha sido reservado");   
     }
     
+    /*Mensaje que pregunta si desea liberar un ticket*/
     public void mensajeLiberarTicket(){
         Object[] options = {"SI","NO"};
         JDialog.setDefaultLookAndFeelDecorated(true);
@@ -756,6 +732,7 @@ public class PanelCliente extends javax.swing.JFrame {
         }
     }
     
+    /*Muestra un mensaje cuando se desea colocar un ticket como resuelto*/
     public void mensajeTicketResuelto(){
         Object[] options = {"SI","NO"};
         JDialog.setDefaultLookAndFeelDecorated(true);
@@ -786,13 +763,21 @@ public class PanelCliente extends javax.swing.JFrame {
 
         }
     }
+    
+    /*Permite actualizar la informacion de Tickets Pendientes*/
     public void consultarTickets(String COLOR){
         ControladorCliente.peticionSolicitarTicket(COLOR);
+    }
+    
+    /*Permite actualizar la informacion de Reporte de tickets*/
+    public void consultarReportes(String Usuario){
+        ControladorCliente.peticionReporteTickets(Usuario);
     }
     
     public void refrescarPanelTicketsPendientes(String numTicket,String problema,
             String cliente,String fechaIngreso,Categorias categoria){
         JLabel ticket = new javax.swing.JLabel(numTicket+": "+problema);
+        //
         PanelPendientes.setLayout(new GridLayout(0,1,20,20));
         PanelPendientes.add(ticket);
         PanelPendientes.revalidate();
@@ -916,7 +901,6 @@ public class PanelCliente extends javax.swing.JFrame {
 
             @Override
             public void mouseExited(MouseEvent e) {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
             }
             
         });
@@ -992,7 +976,6 @@ public class PanelCliente extends javax.swing.JFrame {
     private javax.swing.JButton btnResuelto;
     private javax.swing.JLabel clienteId;
     private javax.swing.JLabel idTicket;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
