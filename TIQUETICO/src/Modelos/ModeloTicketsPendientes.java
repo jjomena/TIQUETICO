@@ -38,4 +38,8 @@ public class ModeloTicketsPendientes extends AbstractListModel {
         return lista.get(index);
     }
     
+    public void eliminarTodosTickets(){
+        lista.clear();
+    }
+    
 }

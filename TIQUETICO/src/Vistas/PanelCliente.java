@@ -146,16 +146,31 @@ public class PanelCliente extends javax.swing.JFrame {
         semaforoMedio.setBorder(null);
         semaforoMedio.setBorderPainted(false);
         semaforoMedio.setContentAreaFilled(false);
+        semaforoMedio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                semaforoMedioActionPerformed(evt);
+            }
+        });
 
         semaforoArriba.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/iconRojo.jpg"))); // NOI18N
         semaforoArriba.setBorder(null);
         semaforoArriba.setBorderPainted(false);
         semaforoArriba.setContentAreaFilled(false);
+        semaforoArriba.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                semaforoArribaMouseClicked(evt);
+            }
+        });
 
         semaforoAbajo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/iconGris.png"))); // NOI18N
         semaforoAbajo.setBorder(null);
         semaforoAbajo.setBorderPainted(false);
         semaforoAbajo.setContentAreaFilled(false);
+        semaforoAbajo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                semaforoAbajoActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout PanelSemaforoLayout = new javax.swing.GroupLayout(PanelSemaforo);
         PanelSemaforo.setLayout(PanelSemaforoLayout);
@@ -706,8 +721,30 @@ public class PanelCliente extends javax.swing.JFrame {
             txtPendienteClienteId.setText(ticket.getIdCliente());
             txtPendienteAsunto.setText(ticket.getProblema());
             txtPendienteIngreso.setText(ticket.getFechaIngreso());
+            modificarEstadoSemaforo(ticket.getCategoria());
         }
     }//GEN-LAST:event_ListaTicketsPendientesMouseClicked
+
+    private void semaforoArribaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_semaforoArribaMouseClicked
+        // TODO add your handling code here:
+        limpiarListaTicketsPendientes();
+        modificarEstadoSemaforo("ROJO");
+        consultarTickets("ROJO");
+    }//GEN-LAST:event_semaforoArribaMouseClicked
+
+    private void semaforoMedioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_semaforoMedioActionPerformed
+        // TODO add your handling code here:
+        limpiarListaTicketsPendientes();
+        modificarEstadoSemaforo("AMARILLO");
+        consultarTickets("AMARILLO");
+    }//GEN-LAST:event_semaforoMedioActionPerformed
+
+    private void semaforoAbajoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_semaforoAbajoActionPerformed
+        // TODO add your handling code here:
+        limpiarListaTicketsPendientes();
+        modificarEstadoSemaforo("VERDE");
+        consultarTickets("VERDE");
+    }//GEN-LAST:event_semaforoAbajoActionPerformed
 
     /*Mensaje que confirma que el usuario desea reservar un ticket*/
     public void mensajeTicketEnAtencion(String ticket,String usuario){
@@ -726,7 +763,8 @@ public class PanelCliente extends javax.swing.JFrame {
     public void mensajeExitoReservarTicket(String ticket){
         JDialog.setDefaultLookAndFeelDecorated(true);
         JFrame parent = new JFrame();
-        JOptionPane.showMessageDialog(parent, "El ticket "+ticket+ " ha sido reservado");   
+        JOptionPane.showMessageDialog(parent, "El ticket "+ticket+ " ha sido reservado"); 
+        eliminarTicketPendiente(ListaTicketsPendientes.getSelectedIndex());
     }
     
     /*Mensaje que pregunta si desea liberar un ticket*/
@@ -802,47 +840,16 @@ public class PanelCliente extends javax.swing.JFrame {
         Ticket ticket = new Ticket(numTicket,problema,cliente,fechaIngreso,categoria);
         modeloTickets.agregarTicket(ticket); 
     }
-    /*
-    public void refrescarPanelTicketsPendientes(String numTicket,String problema,
-            String cliente,String fechaIngreso,Categorias categoria){
-        JLabel ticket = new javax.swing.JLabel(numTicket+": "+problema);
-        //
-        PanelPendientes.setLayout(new GridLayout(0,1,20,20));
-        PanelPendientes.add(ticket);
-        PanelPendientes.revalidate();
-        PanelPendientes.repaint();
-        ticket.addMouseListener(new MouseListener(){
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                informacionTicketPendiente(numTicket,cliente,problema,fechaIngreso,categoria);  
-            }
-
-            @Override
-            public void mousePressed(MouseEvent e) {
-                
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent e) {
-                
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-              
-            }
-        });
-        
+    
+    public void eliminarTicketPendiente(int index){
+        modeloTickets.eliminarTicket(index);
     }
-    */
-    public void informacionTicketPendiente(String idTicket,String cliente, 
-            String Asunto, String fechaIngreso,Categorias categoria){
-        
+    
+    public void limpiarListaTicketsPendientes(){
+        modeloTickets.eliminarTodosTickets();
+    }
+    
+    public void modificarEstadoSemaforo(String categoria){
         String path;
         URL url = null;
         ImageIcon icon;
@@ -858,14 +865,14 @@ public class PanelCliente extends javax.swing.JFrame {
             semaforoArriba.setIcon(new ImageIcon("imagenes/iconGris.jpg"));
         }
         else switch (categoria) {
-            case VERDE:
+            case "VERDE":
                 path = "/imagenes/iconVerde.jpg";
                 url = this.getClass().getResource(path);
                 icon = new ImageIcon(url);
-                semaforoArriba.setIcon(icon);
-                semaforoArriba.repaint();
+                semaforoAbajo.setIcon(icon);
+                semaforoAbajo.repaint();
                 break;
-            case AMARILLO:
+            case "AMARILLO":
                 path = "/imagenes/iconAmarillo.jpg"; 
                 url = this.getClass().getResource(path);
                 icon = new ImageIcon(url);
@@ -876,18 +883,11 @@ public class PanelCliente extends javax.swing.JFrame {
                 path = "/imagenes/iconRojo.jpg";  
                 url = this.getClass().getResource(path);
                 icon = new ImageIcon(url);
-                semaforoAbajo.setIcon(icon);
-                semaforoAbajo.repaint();
+                semaforoArriba.setIcon(icon);
+                semaforoArriba.repaint();
                 break;
         }
-        
-        txtPendienteIdTicket.setText(idTicket);
-        txtPendienteClienteId.setText(cliente);
-        txtPendienteAsunto.setText(Asunto);
-        txtPendienteIngreso.setText(fechaIngreso);
-        
     }
-    
     
     public void refrescarTicketAtendido(String numTicket,String idCliente,
             String asunto,String fechaIngreso,String fechaAtencion){

@@ -166,6 +166,9 @@
                 <Property name="borderPainted" type="boolean" value="false"/>
                 <Property name="contentAreaFilled" type="boolean" value="false"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="semaforoMedioActionPerformed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JButton" name="semaforoArriba">
               <Properties>
@@ -178,6 +181,9 @@
                 <Property name="borderPainted" type="boolean" value="false"/>
                 <Property name="contentAreaFilled" type="boolean" value="false"/>
               </Properties>
+              <Events>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="semaforoArribaMouseClicked"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JButton" name="semaforoAbajo">
               <Properties>
@@ -190,6 +196,9 @@
                 <Property name="borderPainted" type="boolean" value="false"/>
                 <Property name="contentAreaFilled" type="boolean" value="false"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="semaforoAbajoActionPerformed"/>
+              </Events>
             </Component>
           </SubComponents>
         </Container>

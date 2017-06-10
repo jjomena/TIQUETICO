@@ -9,6 +9,7 @@ import Controladores.ControladorCliente;
 import Vistas.PanelCliente;
 import Vistas.PanelServidor;
 import Controladores.ControladorLogin;
+import Modelos.ModeloTiempo;
 
 /**
  *
@@ -32,7 +33,8 @@ public class TIQUETICO {
         //boolean rest=ControladorLogin.peticionConectarEmpleado("Joaquin", "1234");
         //System.out.println(rest);
         //ControladorCliente.peticionSolicitarTicket("VERDE");
-        
+        ModeloTiempo md = new ModeloTiempo();
+        md.iniciarProceso();
     }
     
 }
