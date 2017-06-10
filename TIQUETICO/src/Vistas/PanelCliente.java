@@ -883,6 +883,56 @@ public class PanelCliente extends javax.swing.JFrame {
         txtFechaIngreso.setText(fechaIngreso);
         txtFechaAtencion.setText(fechaAtencion);
     }
+    
+    public void refrescarPanelReportes(String idTicket,String idCliente,
+            String problema,String ingresoTicket,String inicioAtencion,
+            String tiempo,String categoria,String comentario, String estado){
+        //
+        String idUsuario = txtNombreUsuario.getText();
+        JLabel ticket = new javax.swing.JLabel(idTicket+": "+problema);
+        PanelReportes.setLayout(new GridLayout(0,1,20,20));
+        PanelReportes.add(ticket);
+        PanelReportes.revalidate();
+        PanelReportes.repaint();
+        ticket.addMouseListener(new MouseListener(){
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                informacionReporteTicket(idTicket,idCliente,
+                        problema,ingresoTicket,inicioAtencion,
+                        tiempo,categoria,comentario,estado,idUsuario);
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+            
+        });
+        
+        
+    }
+    
+    public void informacionReporteTicket(String idTicket,String idCliente,
+            String problema,String ingresoTicket,String inicioAtencion,
+            String tiempo,String categoria,String comentario, String estado,String idUsuario){
+        
+        TicketResuelto facturaTicket = new TicketResuelto();
+        facturaTicket.mostratTicketResuelto(idTicket, idUsuario, idCliente, problema, ingresoTicket, inicioAtencion, tiempo, categoria, comentario);
+        facturaTicket.show();
+        
+    }
     /**
      * @param args the command line arguments
      */

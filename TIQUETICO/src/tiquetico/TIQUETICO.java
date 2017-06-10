@@ -29,10 +29,9 @@ public class TIQUETICO {
         //server.refrescarPanelEmpleados("Joaquin Mena", Categorias.VERDE);
         //server.refrescarPanelEmpleados("Maria Castro", Categorias.ROJO);
         //server.refrescarPanelEmpleados("Juan Hernandez", Categorias.AMARILLO);
-        //ControladorLogin login =new ControladorLogin();
         //boolean rest=ControladorLogin.peticionConectarEmpleado("Joaquin", "1234");
         //System.out.println(rest);
-        ControladorCliente.peticionSolicitarTicket("VERDE");
+        //ControladorCliente.peticionSolicitarTicket("VERDE");
         
     }
     

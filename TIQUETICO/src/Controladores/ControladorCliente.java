@@ -191,6 +191,7 @@ public class ControladorCliente {
         String estado = infoTicket[8];
         //
         PanelCliente cliente = PanelCliente.getInstance();
+        cliente.refrescarPanelReportes(idTicket, idCliente, tiempo, ingresoTicket, inicioAtencio, tiempo, categoria, comentario, estado);
         
     }
 }
