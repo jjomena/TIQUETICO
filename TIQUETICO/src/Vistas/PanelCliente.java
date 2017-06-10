@@ -7,6 +7,7 @@ package Vistas;
 
 import Controladores.ControladorCliente;
 import Modelos.ModeloTicketsPendientes;
+import Modelos.ModeloTiempo;
 import Modelos.Ticket;
 import java.awt.GridLayout;
 import java.awt.event.MouseEvent;
@@ -27,6 +28,7 @@ import tiquetico.Categorias;
 public class PanelCliente extends javax.swing.JFrame {
     private static PanelCliente INSTANCE = null;
     ModeloTicketsPendientes modeloTickets = new ModeloTicketsPendientes();
+    ModeloTiempo modTiempo;
 
     /**
      * Creates new form PanelCliente
@@ -119,6 +121,12 @@ public class PanelCliente extends javax.swing.JFrame {
         txtTiempoPromedio = new javax.swing.JLabel();
         ScrollPaneReportes = new javax.swing.JScrollPane();
         PanelReportes = new javax.swing.JPanel();
+        btnPause = new javax.swing.JButton();
+        btnPlay = new javax.swing.JButton();
+        labelEstado = new javax.swing.JLabel();
+        txtEstado = new javax.swing.JLabel();
+        labelTiempo = new javax.swing.JLabel();
+        txtTiempo = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -594,32 +602,89 @@ public class PanelCliente extends javax.swing.JFrame {
 
         TabbedPaneCliente.addTab("Reportes", TabReportes);
 
+        btnPause.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/pause.jpg"))); // NOI18N
+        btnPause.setBorderPainted(false);
+        btnPause.setContentAreaFilled(false);
+        btnPause.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPauseActionPerformed(evt);
+            }
+        });
+
+        btnPlay.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/play.jpg"))); // NOI18N
+        btnPlay.setBorderPainted(false);
+        btnPlay.setContentAreaFilled(false);
+        btnPlay.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPlayActionPerformed(evt);
+            }
+        });
+
+        labelEstado.setText("ESTADO:");
+
+        txtEstado.setText("No se esta atendiendo Ticket");
+
+        labelTiempo.setText("Tiempo:");
+
+        txtTiempo.setText("0");
+
         javax.swing.GroupLayout PanelClientesLayout = new javax.swing.GroupLayout(PanelClientes);
         PanelClientes.setLayout(PanelClientesLayout);
         PanelClientesLayout.setHorizontalGroup(
             PanelClientesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(PanelClientesLayout.createSequentialGroup()
                 .addGap(24, 24, 24)
-                .addGroup(PanelClientesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(btnDesconectar)
-                    .addGroup(PanelClientesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(TabbedPaneCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 1000, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGroup(PanelClientesLayout.createSequentialGroup()
-                            .addComponent(labelUsuario)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(txtNombreUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGroup(PanelClientesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(TabbedPaneCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 1000, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(PanelClientesLayout.createSequentialGroup()
+                        .addComponent(labelUsuario)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtNombreUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(264, 264, 264)
+                        .addGroup(PanelClientesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(PanelClientesLayout.createSequentialGroup()
+                                .addComponent(labelTiempo)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(txtTiempo)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnPause)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnPlay)
+                                .addGap(13, 13, 13)
+                                .addComponent(btnDesconectar))
+                            .addGroup(PanelClientesLayout.createSequentialGroup()
+                                .addComponent(labelEstado)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtEstado)
+                                .addGap(0, 0, Short.MAX_VALUE)))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         PanelClientesLayout.setVerticalGroup(
             PanelClientesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(PanelClientesLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(PanelClientesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(labelUsuario)
-                    .addComponent(txtNombreUsuario))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnDesconectar)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(PanelClientesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(PanelClientesLayout.createSequentialGroup()
+                        .addGroup(PanelClientesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(labelUsuario)
+                            .addComponent(txtNombreUsuario)
+                            .addComponent(labelEstado)
+                            .addComponent(txtEstado))
+                        .addGroup(PanelClientesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(PanelClientesLayout.createSequentialGroup()
+                                .addGap(14, 14, 14)
+                                .addComponent(btnDesconectar))
+                            .addGroup(PanelClientesLayout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(PanelClientesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(labelTiempo)
+                                    .addComponent(txtTiempo))))
+                        .addGap(28, 28, 28))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelClientesLayout.createSequentialGroup()
+                        .addGroup(PanelClientesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(btnPlay)
+                            .addComponent(btnPause))
+                        .addGap(18, 18, 18)))
                 .addComponent(TabbedPaneCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 401, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -645,7 +710,7 @@ public class PanelCliente extends javax.swing.JFrame {
                     .addGroup(PanelFondoClientesLayout.createSequentialGroup()
                         .addGap(153, 153, 153)
                         .addComponent(PanelSemaforo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(17, Short.MAX_VALUE))
+                .addContainerGap(23, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -746,6 +811,16 @@ public class PanelCliente extends javax.swing.JFrame {
         consultarTickets("VERDE");
     }//GEN-LAST:event_semaforoAbajoActionPerformed
 
+    private void btnPauseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPauseActionPerformed
+        // TODO add your handling code here:
+        pausarProceso();
+    }//GEN-LAST:event_btnPauseActionPerformed
+
+    private void btnPlayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPlayActionPerformed
+        // TODO add your handling code here:
+        reanudarProceso();
+    }//GEN-LAST:event_btnPlayActionPerformed
+
     /*Mensaje que confirma que el usuario desea reservar un ticket*/
     public void mensajeTicketEnAtencion(String ticket,String usuario){
         Object[] options = {"SI","NO"};
@@ -802,6 +877,7 @@ public class PanelCliente extends javax.swing.JFrame {
                 JOptionPane.WARNING_MESSAGE,
                 null,options,options[1]);
         if(respuesta == 0){
+            pausarProceso();
             String idUsuario = txtNombreUsuario.getText();
             String idCliente = txtClienteId.getText();
             String Ticket = txtTicketId.getText();
@@ -809,7 +885,7 @@ public class PanelCliente extends javax.swing.JFrame {
             String asuntoTicket = txtAsunto.getText();
             String fechaIngreso = txtFechaIngreso.getText();
             String fechaAtencion = txtFechaAtencion.getText();
-            String tiempo = "10s"; //Falta calcular tiempo
+            String tiempo = modTiempo.getTiempoAcumulado(); //Falta calcular tiempo
             String categoria = "ROJO";//Falta asignar las categorias
             boolean ejecutar = ControladorCliente.peticionResolverTicket(idUsuario, Ticket, comentario, tiempo);
             //
@@ -847,6 +923,24 @@ public class PanelCliente extends javax.swing.JFrame {
     
     public void limpiarListaTicketsPendientes(){
         modeloTickets.eliminarTodosTickets();
+    }
+    
+    public void iniciarProceso(){
+        modTiempo = new ModeloTiempo();
+        modTiempo.iniciarProceso();
+        txtEstado.setText("Se inicio el proceso"); 
+        txtTiempo.setText("0");
+    }
+    
+    public void pausarProceso(){
+        modTiempo.pausarProceso();
+        txtEstado.setText("Se pauso el proceso"); 
+        txtTiempo.setText(modTiempo.calcularProceso());
+    }
+    
+    public void reanudarProceso(){
+        txtEstado.setText("Se reanudo el proceso");
+        modTiempo.iniciarProceso();
     }
     
     public void modificarEstadoSemaforo(String categoria){
@@ -1001,6 +1095,8 @@ public class PanelCliente extends javax.swing.JFrame {
     private javax.swing.JButton btnCerrar;
     private javax.swing.JButton btnDesconectar;
     private javax.swing.JButton btnLiberar;
+    private javax.swing.JButton btnPause;
+    private javax.swing.JButton btnPlay;
     private javax.swing.JButton btnResuelto;
     private javax.swing.JLabel clienteId;
     private javax.swing.JLabel idTicket;
@@ -1016,15 +1112,18 @@ public class PanelCliente extends javax.swing.JFrame {
     private javax.swing.JLabel labelClienteId;
     private javax.swing.JLabel labelComentario;
     private javax.swing.JLabel labelEmcabezadoCliente;
+    private javax.swing.JLabel labelEstado;
     private javax.swing.JLabel labelIngreso;
     private javax.swing.JLabel labelTicketId;
     private javax.swing.JLabel labelTicketResueltos;
+    private javax.swing.JLabel labelTiempo;
     private javax.swing.JLabel labelUsuario;
     private javax.swing.JButton semaforoAbajo;
     private javax.swing.JButton semaforoArriba;
     private javax.swing.JButton semaforoMedio;
     private javax.swing.JLabel txtAsunto;
     private javax.swing.JLabel txtClienteId;
+    private javax.swing.JLabel txtEstado;
     private javax.swing.JLabel txtFechaAtencion;
     private javax.swing.JLabel txtFechaIngreso;
     private javax.swing.JLabel txtNombreUsuario;
@@ -1035,6 +1134,7 @@ public class PanelCliente extends javax.swing.JFrame {
     private javax.swing.JLabel txtTicketId;
     private javax.swing.JLabel txtTicketsNoResueltos;
     private javax.swing.JLabel txtTicketsResueltos;
+    private javax.swing.JLabel txtTiempo;
     private javax.swing.JLabel txtTiempoPromedio;
     // End of variables declaration//GEN-END:variables
 }

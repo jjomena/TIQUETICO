@@ -91,6 +91,7 @@ public class ControladorCliente {
         PanelCliente cliente = PanelCliente.getInstance();
         cliente.mensajeExitoReservarTicket(numTicket);
         cliente.refrescarTicketAtendido(numTicket, idCliente, asunto, fechaIngreso, fechaAtencion); 
+        cliente.iniciarProceso();
     }
     
     
