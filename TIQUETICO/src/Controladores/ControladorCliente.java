@@ -29,14 +29,14 @@ public class ControladorCliente {
                 cadena =respuesta.substring(i+1, respuesta.length()-1);
                 String[] words=cadena.split("/");
                 for(String w:words){
-                    informacionSolicitarTicket(w);
+                    informacionSolicitarTicket(w,COLOR);
                 }
                 break;
             }
         }
     }
     
-    public static void informacionSolicitarTicket(String ticket){
+    public static void informacionSolicitarTicket(String ticket,String COLOR){
         String[] infoTicket=ticket.split("<");
         String numTicket=infoTicket[0];
         String problema=infoTicket[1];
@@ -44,7 +44,8 @@ public class ControladorCliente {
         String fechaIngreso=infoTicket[3];
         //
         PanelCliente cliente = PanelCliente.getInstance();
-        cliente.refrescarPanelTicketsPendientes(numTicket, problema, idCliente, fechaIngreso, Categorias.VERDE);
+        //cliente.refrescarPanelTicketsPendientes(numTicket, problema, idCliente, fechaIngreso, Categorias.VERDE);
+        cliente.agregarTicketPendiente(numTicket, problema, idCliente, fechaIngreso,COLOR);
     }
     
     public static void peticionReservarTicket(String idUsuario,String idTicket){
