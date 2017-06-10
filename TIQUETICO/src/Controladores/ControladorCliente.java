@@ -89,6 +89,7 @@ public class ControladorCliente {
         String fechaAtencion=infoTicket[4];
         //
         PanelCliente cliente = PanelCliente.getInstance();
+        cliente.mensajeExitoReservarTicket(numTicket);
         cliente.refrescarTicketAtendido(numTicket, idCliente, asunto, fechaIngreso, fechaAtencion); 
     }
     

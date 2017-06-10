@@ -695,10 +695,11 @@ public class PanelCliente extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void btnAtenderTicketActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAtenderTicketActionPerformed
-        // TODO add your handling code here:
+        // Boton en el que el usuario solicita reservar un ticket para ser atendido
         String usuario = txtNombreUsuario.getText();
         String ticket = txtPendienteIdTicket.getText();
-        ControladorCliente.peticionReservarTicket(usuario, ticket);
+        mensajeTicketEnAtencion(ticket,usuario); //Mensaje de confirmacion.
+        //ControladorCliente.peticionReservarTicket(usuario, ticket);
     }//GEN-LAST:event_btnAtenderTicketActionPerformed
 
     private void btnDesconectarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDesconectarActionPerformed
@@ -710,6 +711,26 @@ public class PanelCliente extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnDesconectarActionPerformed
 
+    /*Mensaje que confirma que el usuario desea reservar un ticket*/
+    public void mensajeTicketEnAtencion(String ticket,String usuario){
+        Object[] options = {"SI","NO"};
+        JDialog.setDefaultLookAndFeelDecorated(true);
+        int respuesta = JOptionPane.showOptionDialog(null,"Está seguro que desea atender el ticket "+ticket,"Atención",
+                JOptionPane.YES_NO_CANCEL_OPTION,
+                JOptionPane.WARNING_MESSAGE,
+                null,options,options[1]);
+        if(respuesta == 0){
+            ControladorCliente.peticionReservarTicket(usuario, ticket);
+        } 
+    }
+    
+    /*Mensaje que se despliega si el ticket fue reservado con exito*/
+    public void mensajeExitoReservarTicket(String ticket){
+        JDialog.setDefaultLookAndFeelDecorated(true);
+        JFrame parent = new JFrame();
+        JOptionPane.showMessageDialog(parent, "El ticket "+ticket+ " ha sido reservado");   
+    }
+    
     public void mensajeLiberarTicket(){
         Object[] options = {"SI","NO"};
         JDialog.setDefaultLookAndFeelDecorated(true);
@@ -727,7 +748,7 @@ public class PanelCliente extends javax.swing.JFrame {
                JDialog.setDefaultLookAndFeelDecorated(true);
                JFrame parent = new JFrame();
                JOptionPane.showMessageDialog(parent, "El ticket "+idTicket+ " se ha vuelto a colorcar"
-                       + "en la cola de pendientes");   
+                       + " en la cola de pendientes");   
            }
            else{
                //Mostrar msj de error cuando no se logra LiberarTicket
