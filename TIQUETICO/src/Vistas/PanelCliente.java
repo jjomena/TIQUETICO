@@ -6,8 +6,10 @@
 package Vistas;
 
 import Controladores.ControladorCliente;
+import Modelos.ModeloReporteTicket;
 import Modelos.ModeloTicketsPendientes;
 import Modelos.ModeloTiempo;
+import Modelos.Reporte;
 import Modelos.Ticket;
 import java.awt.GridLayout;
 import java.awt.event.MouseEvent;
@@ -28,6 +30,7 @@ import tiquetico.Categorias;
 public class PanelCliente extends javax.swing.JFrame {
     private static PanelCliente INSTANCE = null;
     ModeloTicketsPendientes modeloTickets = new ModeloTicketsPendientes();
+    ModeloReporteTicket modeloReporte = new ModeloReporteTicket();
     ModeloTiempo modTiempo;
 
     /**
@@ -37,6 +40,7 @@ public class PanelCliente extends javax.swing.JFrame {
         this.setUndecorated(true);
         initComponents();
         ListaTicketsPendientes.setModel(modeloTickets);
+        ListaReporteTickets.setModel(modeloReporte);
         //this.setExtendedState(MAXIMIZED_BOTH);
     }
     
@@ -119,8 +123,8 @@ public class PanelCliente extends javax.swing.JFrame {
         txtTicketsResueltos = new javax.swing.JLabel();
         txtTicketsNoResueltos = new javax.swing.JLabel();
         txtTiempoPromedio = new javax.swing.JLabel();
-        ScrollPaneReportes = new javax.swing.JScrollPane();
-        PanelReportes = new javax.swing.JPanel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        ListaReporteTickets = new javax.swing.JList<>();
         btnPause = new javax.swing.JButton();
         btnPlay = new javax.swing.JButton();
         labelEstado = new javax.swing.JLabel();
@@ -535,18 +539,13 @@ public class PanelCliente extends javax.swing.JFrame {
         txtTiempoPromedio.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         txtTiempoPromedio.setText("Tiempo Promedio");
 
-        javax.swing.GroupLayout PanelReportesLayout = new javax.swing.GroupLayout(PanelReportes);
-        PanelReportes.setLayout(PanelReportesLayout);
-        PanelReportesLayout.setHorizontalGroup(
-            PanelReportesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 449, Short.MAX_VALUE)
-        );
-        PanelReportesLayout.setVerticalGroup(
-            PanelReportesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 287, Short.MAX_VALUE)
-        );
-
-        ScrollPaneReportes.setViewportView(PanelReportes);
+        ListaReporteTickets.setToolTipText("");
+        ListaReporteTickets.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                ListaReporteTicketsMouseClicked(evt);
+            }
+        });
+        jScrollPane3.setViewportView(ListaReporteTickets);
 
         javax.swing.GroupLayout TabReportesLayout = new javax.swing.GroupLayout(TabReportes);
         TabReportes.setLayout(TabReportesLayout);
@@ -559,45 +558,44 @@ public class PanelCliente extends javax.swing.JFrame {
                         .addComponent(jLabel3)
                         .addGap(18, 18, 18)
                         .addComponent(txtTiempoPromedio))
+                    .addGroup(TabReportesLayout.createSequentialGroup()
+                        .addComponent(labelTicketResueltos)
+                        .addGap(18, 18, 18)
+                        .addComponent(txtTicketsResueltos, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jProgressBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(TabReportesLayout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addGap(18, 18, 18)
-                        .addComponent(txtTicketsNoResueltos, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(TabReportesLayout.createSequentialGroup()
-                        .addComponent(labelTicketResueltos)
-                        .addGap(18, 18, 18)
-                        .addComponent(txtTicketsResueltos, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
-                .addComponent(ScrollPaneReportes, javax.swing.GroupLayout.PREFERRED_SIZE, 451, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(28, 28, 28))
+                        .addComponent(txtTicketsNoResueltos, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 472, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(20, Short.MAX_VALUE))
         );
         TabReportesLayout.setVerticalGroup(
             TabReportesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(TabReportesLayout.createSequentialGroup()
-                .addGroup(TabReportesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(TabReportesLayout.createSequentialGroup()
-                        .addGap(95, 95, 95)
-                        .addGroup(TabReportesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(labelTicketResueltos)
-                            .addComponent(txtTicketsResueltos))
-                        .addGap(33, 33, 33)
-                        .addGroup(TabReportesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel1)
-                            .addComponent(txtTicketsNoResueltos))
-                        .addGap(32, 32, 32)
-                        .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jProgressBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(31, 31, 31)
-                        .addGroup(TabReportesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel3)
-                            .addComponent(txtTiempoPromedio)))
-                    .addGroup(TabReportesLayout.createSequentialGroup()
-                        .addGap(28, 28, 28)
-                        .addComponent(ScrollPaneReportes, javax.swing.GroupLayout.PREFERRED_SIZE, 289, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(55, Short.MAX_VALUE))
+                .addGap(95, 95, 95)
+                .addGroup(TabReportesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(labelTicketResueltos)
+                    .addComponent(txtTicketsResueltos))
+                .addGap(33, 33, 33)
+                .addGroup(TabReportesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(txtTicketsNoResueltos))
+                .addGap(36, 36, 36)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jProgressBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(27, 27, 27)
+                .addGroup(TabReportesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(txtTiempoPromedio))
+                .addContainerGap(79, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, TabReportesLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(60, 60, 60))
         );
 
         TabbedPaneCliente.addTab("Reportes", TabReportes);
@@ -665,11 +663,12 @@ public class PanelCliente extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(PanelClientesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(PanelClientesLayout.createSequentialGroup()
-                        .addGroup(PanelClientesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(labelUsuario)
-                            .addComponent(txtNombreUsuario)
-                            .addComponent(labelEstado)
-                            .addComponent(txtEstado))
+                        .addGroup(PanelClientesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(labelEstado, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(PanelClientesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(labelUsuario)
+                                .addComponent(txtNombreUsuario)
+                                .addComponent(txtEstado)))
                         .addGroup(PanelClientesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(PanelClientesLayout.createSequentialGroup()
                                 .addGap(14, 14, 14)
@@ -820,6 +819,22 @@ public class PanelCliente extends javax.swing.JFrame {
         // TODO add your handling code here:
         reanudarProceso();
     }//GEN-LAST:event_btnPlayActionPerformed
+
+    private void ListaReporteTicketsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ListaReporteTicketsMouseClicked
+        // TODO add your handling code here:
+        TicketResuelto facturaTicket = new TicketResuelto();
+        int seleccion = ListaReporteTickets.getSelectedIndex();
+        String usuario = txtNombreUsuario.getText();
+        if(seleccion!=-1){
+            Reporte reporte = modeloReporte.getReporte(seleccion);
+            facturaTicket.mostratTicketResuelto(reporte.getIdTicket(), usuario, 
+                    reporte.getIdCliente(), reporte.getProblema(), 
+                    reporte.getIngresoTicket(), reporte.getInicioAtencion(), 
+                    reporte.getTiempo(), reporte.getCategoria(), 
+                    reporte.getComentario());
+            facturaTicket.show();
+        }
+    }//GEN-LAST:event_ListaReporteTicketsMouseClicked
 
     /*Mensaje que confirma que el usuario desea reservar un ticket*/
     public void mensajeTicketEnAtencion(String ticket,String usuario){
@@ -992,44 +1007,19 @@ public class PanelCliente extends javax.swing.JFrame {
         txtFechaAtencion.setText(fechaAtencion);
     }
     
-    public void refrescarPanelReportes(String idTicket,String idCliente,
+    public void agregarReporteTicket(String idTicket,String idCliente,
             String problema,String ingresoTicket,String inicioAtencion,
             String tiempo,String categoria,String comentario, String estado){
-        //
-        String idUsuario = txtNombreUsuario.getText();
-        JLabel ticket = new javax.swing.JLabel(idTicket+": "+problema);
-        PanelReportes.setLayout(new GridLayout(0,1,20,20));
-        PanelReportes.add(ticket);
-        PanelReportes.revalidate();
-        PanelReportes.repaint();
-        ticket.addMouseListener(new MouseListener(){
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                informacionReporteTicket(idTicket,idCliente,
-                        problema,ingresoTicket,inicioAtencion,
-                        tiempo,categoria,comentario,estado,idUsuario);
-            }
-
-            @Override
-            public void mousePressed(MouseEvent e) {
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent e) {
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-            }
-            
-        });
-        
-        
+        Reporte reporte = new Reporte(idTicket,idCliente,problema,ingresoTicket,
+                inicioAtencion,tiempo,categoria,comentario,estado);
+        modeloReporte.agregarReporte(reporte); 
     }
+    
+    
+    public void limpiarListaReporteTickets(){
+        modeloReporte.eliminarTodosReportes();
+    }
+    
     
     public void informacionReporteTicket(String idTicket,String idCliente,
             String problema,String ingresoTicket,String inicioAtencion,
@@ -1077,14 +1067,13 @@ public class PanelCliente extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel Ingreso;
+    private javax.swing.JList<String> ListaReporteTickets;
     private javax.swing.JList<String> ListaTicketsPendientes;
     private javax.swing.JPanel PanelClientes;
     private javax.swing.JPanel PanelDatos;
     private javax.swing.JPanel PanelFondoClientes;
     private javax.swing.JPanel PanelFormAtendiendo;
-    private javax.swing.JPanel PanelReportes;
     private javax.swing.JPanel PanelSemaforo;
-    private javax.swing.JScrollPane ScrollPaneReportes;
     private javax.swing.JPanel TabAtendiendo;
     private javax.swing.JPanel TabPendientes;
     private javax.swing.JPanel TabReportes;
@@ -1107,6 +1096,7 @@ public class PanelCliente extends javax.swing.JFrame {
     private javax.swing.JProgressBar jProgressBar1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JLabel labelAsunto;
     private javax.swing.JLabel labelAtencion;
     private javax.swing.JLabel labelClienteId;

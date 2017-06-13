@@ -44,7 +44,6 @@ public class ControladorCliente {
         String fechaIngreso=infoTicket[3];
         //
         PanelCliente cliente = PanelCliente.getInstance();
-        //cliente.refrescarPanelTicketsPendientes(numTicket, problema, idCliente, fechaIngreso, Categorias.VERDE);
         cliente.agregarTicketPendiente(numTicket, problema, idCliente, fechaIngreso,COLOR);
     }
     
@@ -192,7 +191,7 @@ public class ControladorCliente {
         String estado = infoTicket[8];
         //
         PanelCliente cliente = PanelCliente.getInstance();
-        cliente.refrescarPanelReportes(idTicket, idCliente, tiempo, ingresoTicket, inicioAtencio, tiempo, categoria, comentario, estado);
+        cliente.agregarReporteTicket(idTicket, idCliente, tiempo, ingresoTicket, inicioAtencio, tiempo, categoria, comentario, estado);
         
     }
 }
