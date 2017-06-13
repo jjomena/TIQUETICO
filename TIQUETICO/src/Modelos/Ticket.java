@@ -21,6 +21,11 @@ public class Ticket {
         this.fechaIngreso = fechaIngreso;
         this.categoria = categoria; 
     }
+    
+    public Ticket(String idTicket,String problema){
+        this.idTicket = idTicket;
+        this.problema = problema;
+    }
 
     public String getIdTicket() {
         return idTicket;

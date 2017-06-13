@@ -1,6 +1,10 @@
 
 package Vistas;
 
+import Modelos.Empleado;
+import Modelos.ModeloEmpleado;
+import Modelos.ModeloTicketsPendientes;
+import Modelos.Ticket;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridLayout;
@@ -20,6 +24,9 @@ import tiquetico.Categorias;
 
 public class PanelServidor extends javax.swing.JFrame {
 
+    private static PanelServidor INSTANCE = null;
+    ModeloEmpleado modeloEmpleado = new ModeloEmpleado();
+    ModeloTicketsPendientes modeloTickets = new ModeloTicketsPendientes();
     /**
      * Creates new form Panel
      */
@@ -27,76 +34,41 @@ public class PanelServidor extends javax.swing.JFrame {
         //this.setUndecorated(true);
         initComponents();
         this.setExtendedState(MAXIMIZED_BOTH);
+        ListaConexionEmpleados.setModel(modeloEmpleado);
+        ListaTickets.setModel(modeloTickets);
     }
     
-    public void refrescarPanelEmpleados(String nombre,Categorias categoria,
+        /*Patron de diseño Singleton*/
+    private synchronized static void createInstance(){
+        if(INSTANCE == null){
+            INSTANCE = new PanelServidor();
+        }
+    }
+    
+    public static PanelServidor getInstance(){
+        createInstance();
+        return INSTANCE;
+    }
+    
+    
+    public void agregarEmpleado(String nombre,String categoria,
             String ticketsResueltos,String ticketsPendientes){
         agregarEmpleadosComboBox(nombre);
-        JLabel usuario = new javax.swing.JLabel(nombre);
-        usuario.setFont(new Font("Arial", Font.BOLD, 16));
-
-        PanelConexionesEmpleados.setLayout(new GridLayout(0,1,5,5));
-        PanelConexionesEmpleados.add(usuario);
-        PanelConexionesEmpleados.revalidate();
-        PanelConexionesEmpleados.repaint();
-        usuario.addMouseListener(new MouseListener(){
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                informacionUsuario(categoria,ticketsResueltos,ticketsPendientes);
-            }
-
-            @Override
-            public void mousePressed(MouseEvent e) {
-               //nothing
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent e) {
-                //nothing
-                
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                usuario.setBackground(Color.BLUE);
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-                usuario.setBackground(new Color(255,255,255));
-            }
-        }); 
+        Empleado empleado = new Empleado(nombre,categoria,ticketsResueltos,ticketsPendientes);
+        modeloEmpleado.agregarEmpleado(empleado);
     }
     
-    public void informacionUsuario(Categorias categoria,String ticketsResueltos,
-            String ticketsPendientes){
-        String path;
-        URL url = null;
-        ImageIcon icon;
-        if(null == categoria){
-            path = "/imagenes/iconGris.png";
-            iconCategoria.setIcon(new ImageIcon("imagenes/iconGris.jpg"));
-        }
-        else switch (categoria) {
-            case VERDE:
-                path = "/imagenes/iconVerde.jpg";            
-                break;
-            case AMARILLO:
-                path = "/imagenes/iconAmarillo.jpg";             
-                break;
-            default:
-                path = "/imagenes/iconRojo.jpg";               
-                break;
-        }
-        url = this.getClass().getResource(path);
-        icon = new ImageIcon(url);
-        iconCategoria.setIcon(icon);
-        iconCategoria.repaint();
-        //
-        txtTicketsResueltos.setText(ticketsResueltos);
-        txtTicketsPendientes.setText(ticketsPendientes);
-        
-        
+    public void eliminarConexion(int index){
+        modeloEmpleado.eliminarEmpleado(index);
+    }
+    
+    public void limpiarListaConexiones(){
+        modeloEmpleado.eliminarTodosEmpleados();
+    }    
+    
+    public void agregarTicketPendiente(String numTicket,String problema){
+        Ticket ticket = new Ticket(numTicket,problema);
+        modeloTickets.agregarTicket(ticket);   
     }
     
     public void refrescarPanelTicketsSinAsignar(String ticket){
@@ -104,12 +76,13 @@ public class PanelServidor extends javax.swing.JFrame {
         ticketNuevo.setFont(new Font("Arial", Font.BOLD, 12));
         //
         JCheckBox check = new JCheckBox("",false);
-        PanelContornoEstados.setLayout(new GridLayout(0,2,5,5));
-        PanelContornoEstados.add(ticketNuevo);
-        PanelContornoEstados.add(check);
-        PanelContornoEstados.revalidate();
-        PanelContornoEstados.repaint(); 
+        //PanelContornoEstados.setLayout(new GridLayout(0,2,5,5));
+        //PanelContornoEstados.add(ticketNuevo);
+        //PanelContornoEstados.add(check);
+        //PanelContornoEstados.revalidate();
+        //PanelContornoEstados.repaint(); 
     }
+    
     
     public void agregarEmpleadosComboBox(String nombre){
         ComboBoxEncargados.addItem(nombre);
@@ -130,7 +103,7 @@ public class PanelServidor extends javax.swing.JFrame {
         JLabel actividad = new javax.swing.JLabel("Se asigna ticket "+numTicket+" a"+Usuario); 
         actividad.setFont(new Font("Arial", Font.PLAIN, 12));
        //
-        PanelMonitoreoActividades.setLayout(new GridLayout(0,2,5,5));
+        PanelMonitoreoActividades.setLayout(new GridLayout(0,1,5,5));
         PanelMonitoreoActividades.add(actividad);
         PanelMonitoreoActividades.revalidate();
         PanelMonitoreoActividades.repaint();
@@ -154,20 +127,18 @@ public class PanelServidor extends javax.swing.JFrame {
         PanelPrincipal = new javax.swing.JPanel();
         TabMonitoreo = new javax.swing.JTabbedPane();
         TabPanelConexiones = new javax.swing.JPanel();
-        PanelConexionesEmpleados = new javax.swing.JPanel();
         PanelConexionesEstado = new javax.swing.JPanel();
         labelTicketsPendientes = new java.awt.Label();
         labelCategoria = new java.awt.Label();
         labelFechaActivo = new java.awt.Label();
         labelTicketsResueltos = new java.awt.Label();
-        jDateChooserActivoDesde = new com.toedter.calendar.JDateChooser();
         txtTicketsResueltos = new javax.swing.JLabel();
         txtTicketsPendientes = new javax.swing.JLabel();
         iconCategoria = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        ListaConexionEmpleados = new javax.swing.JList<>();
         TabPanelTickets = new javax.swing.JPanel();
-        ScrollPaneTicketsEstado = new javax.swing.JScrollPane();
-        PanelContornoEstados = new javax.swing.JPanel();
         btnTicketsVerde = new javax.swing.JButton();
         btnTicketsAmarillo = new javax.swing.JButton();
         btnTicketsRojo = new javax.swing.JButton();
@@ -180,6 +151,8 @@ public class PanelServidor extends javax.swing.JFrame {
         PanelTicketsRojo = new javax.swing.JPanel();
         btnAgregarTickets = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        ListaTickets = new javax.swing.JList<>();
         TabPanelConsultas = new javax.swing.JPanel();
         PanelConsultas = new javax.swing.JPanel();
         labelEncargado = new javax.swing.JLabel();
@@ -237,23 +210,6 @@ public class PanelServidor extends javax.swing.JFrame {
 
         TabPanelConexiones.setBackground(new java.awt.Color(255, 255, 255));
 
-        PanelConexionesEmpleados.setBackground(new java.awt.Color(255, 255, 255));
-        PanelConexionesEmpleados.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)), javax.swing.BorderFactory.createEmptyBorder(10, 40, 10, 10)));
-        PanelConexionesEmpleados.setMaximumSize(new java.awt.Dimension(450, 300));
-        PanelConexionesEmpleados.setMinimumSize(new java.awt.Dimension(450, 300));
-        PanelConexionesEmpleados.setName(""); // NOI18N
-
-        javax.swing.GroupLayout PanelConexionesEmpleadosLayout = new javax.swing.GroupLayout(PanelConexionesEmpleados);
-        PanelConexionesEmpleados.setLayout(PanelConexionesEmpleadosLayout);
-        PanelConexionesEmpleadosLayout.setHorizontalGroup(
-            PanelConexionesEmpleadosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 398, Short.MAX_VALUE)
-        );
-        PanelConexionesEmpleadosLayout.setVerticalGroup(
-            PanelConexionesEmpleadosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 428, Short.MAX_VALUE)
-        );
-
         PanelConexionesEstado.setBackground(new java.awt.Color(255, 255, 255));
         PanelConexionesEstado.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         PanelConexionesEstado.setPreferredSize(new java.awt.Dimension(561, 300));
@@ -280,6 +236,9 @@ public class PanelServidor extends javax.swing.JFrame {
 
         iconCategoria.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/iconGris.png"))); // NOI18N
 
+        jLabel1.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        jLabel1.setText("Activo_Desde");
+
         javax.swing.GroupLayout PanelConexionesEstadoLayout = new javax.swing.GroupLayout(PanelConexionesEstado);
         PanelConexionesEstado.setLayout(PanelConexionesEstadoLayout);
         PanelConexionesEstadoLayout.setHorizontalGroup(
@@ -299,11 +258,14 @@ public class PanelServidor extends javax.swing.JFrame {
                         .addGroup(PanelConexionesEstadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(labelFechaActivo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(labelCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(2, 2, 2)
                         .addGroup(PanelConexionesEstadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jDateChooserActivoDesde, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(iconCategoria))))
-                .addContainerGap(199, Short.MAX_VALUE))
+                            .addGroup(PanelConexionesEstadoLayout.createSequentialGroup()
+                                .addGap(2, 2, 2)
+                                .addComponent(iconCategoria))
+                            .addGroup(PanelConexionesEstadoLayout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel1)))))
+                .addContainerGap(246, Short.MAX_VALUE))
         );
         PanelConexionesEstadoLayout.setVerticalGroup(
             PanelConexionesEstadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -312,10 +274,10 @@ public class PanelServidor extends javax.swing.JFrame {
                 .addGroup(PanelConexionesEstadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(labelCategoria, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(iconCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(27, 27, 27)
+                .addGap(28, 28, 28)
                 .addGroup(PanelConexionesEstadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(labelFechaActivo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jDateChooserActivoDesde, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel1))
                 .addGap(40, 40, 40)
                 .addGroup(PanelConexionesEstadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(labelTicketsResueltos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -327,67 +289,38 @@ public class PanelServidor extends javax.swing.JFrame {
                 .addContainerGap(53, Short.MAX_VALUE))
         );
 
-        jButton1.setText("jButton1");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+        ListaConexionEmpleados.setToolTipText("");
+        ListaConexionEmpleados.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                ListaConexionEmpleadosMouseClicked(evt);
             }
         });
+        jScrollPane2.setViewportView(ListaConexionEmpleados);
 
         javax.swing.GroupLayout TabPanelConexionesLayout = new javax.swing.GroupLayout(TabPanelConexiones);
         TabPanelConexiones.setLayout(TabPanelConexionesLayout);
         TabPanelConexionesLayout.setHorizontalGroup(
             TabPanelConexionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(TabPanelConexionesLayout.createSequentialGroup()
-                .addGap(31, 31, 31)
-                .addComponent(PanelConexionesEmpleados, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(68, 68, 68)
+                .addContainerGap()
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 510, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
                 .addComponent(PanelConexionesEstado, javax.swing.GroupLayout.PREFERRED_SIZE, 450, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(326, 326, 326))
-            .addGroup(TabPanelConexionesLayout.createSequentialGroup()
-                .addGap(377, 377, 377)
-                .addComponent(jButton1)
-                .addGap(332, 332, 332))
         );
         TabPanelConexionesLayout.setVerticalGroup(
             TabPanelConexionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(TabPanelConexionesLayout.createSequentialGroup()
-                .addGap(6, 6, 6)
-                .addComponent(jButton1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(TabPanelConexionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(TabPanelConexionesLayout.createSequentialGroup()
-                        .addComponent(PanelConexionesEmpleados, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(164, 164, 164))
-                    .addGroup(TabPanelConexionesLayout.createSequentialGroup()
-                        .addGap(27, 27, 27)
-                        .addComponent(PanelConexionesEstado, javax.swing.GroupLayout.PREFERRED_SIZE, 288, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addGap(67, 67, 67)
+                .addGroup(TabPanelConexionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(PanelConexionesEstado, javax.swing.GroupLayout.DEFAULT_SIZE, 288, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2))
+                .addContainerGap(299, Short.MAX_VALUE))
         );
 
         TabMonitoreo.addTab("Conexiones", TabPanelConexiones);
 
         TabPanelTickets.setBackground(new java.awt.Color(255, 255, 255));
-
-        ScrollPaneTicketsEstado.setBackground(new java.awt.Color(255, 255, 255));
-        ScrollPaneTicketsEstado.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
-        ScrollPaneTicketsEstado.setAutoscrolls(true);
-
-        PanelContornoEstados.setBackground(new java.awt.Color(255, 255, 255));
-        PanelContornoEstados.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-
-        javax.swing.GroupLayout PanelContornoEstadosLayout = new javax.swing.GroupLayout(PanelContornoEstados);
-        PanelContornoEstados.setLayout(PanelContornoEstadosLayout);
-        PanelContornoEstadosLayout.setHorizontalGroup(
-            PanelContornoEstadosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 278, Short.MAX_VALUE)
-        );
-        PanelContornoEstadosLayout.setVerticalGroup(
-            PanelContornoEstadosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 347, Short.MAX_VALUE)
-        );
-
-        ScrollPaneTicketsEstado.setViewportView(PanelContornoEstados);
 
         btnTicketsVerde.setBackground(new java.awt.Color(102, 153, 0));
         btnTicketsVerde.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
@@ -474,6 +407,9 @@ public class PanelServidor extends javax.swing.JFrame {
             }
         });
 
+        ListaTickets.setToolTipText("");
+        jScrollPane1.setViewportView(ListaTickets);
+
         javax.swing.GroupLayout TabPanelTicketsLayout = new javax.swing.GroupLayout(TabPanelTickets);
         TabPanelTickets.setLayout(TabPanelTicketsLayout);
         TabPanelTicketsLayout.setHorizontalGroup(
@@ -481,28 +417,27 @@ public class PanelServidor extends javax.swing.JFrame {
             .addGroup(TabPanelTicketsLayout.createSequentialGroup()
                 .addGroup(TabPanelTicketsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(TabPanelTicketsLayout.createSequentialGroup()
-                        .addGroup(TabPanelTicketsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, TabPanelTicketsLayout.createSequentialGroup()
-                                .addComponent(ScrollPaneTicketsEstado, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(TabPanelTicketsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(TabPanelTicketsLayout.createSequentialGroup()
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(TabPanelTicketsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, TabPanelTicketsLayout.createSequentialGroup()
                                         .addComponent(btnTicketsRojo, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(0, 0, Short.MAX_VALUE))
-                                    .addGroup(TabPanelTicketsLayout.createSequentialGroup()
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, TabPanelTicketsLayout.createSequentialGroup()
                                         .addGap(0, 0, Short.MAX_VALUE)
-                                        .addComponent(btnTicketsAmarillo, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(TabPanelTicketsLayout.createSequentialGroup()
-                                        .addGap(0, 0, Short.MAX_VALUE)
-                                        .addComponent(btnTicketsVerde, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                        .addGroup(TabPanelTicketsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(btnTicketsAmarillo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(btnTicketsVerde, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE))))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(ScrollPaneVerde, javax.swing.GroupLayout.PREFERRED_SIZE, 271, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
                                 .addComponent(ScrollPaneAmarillo, javax.swing.GroupLayout.PREFERRED_SIZE, 271, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(ScrollPaneRojo, javax.swing.GroupLayout.PREFERRED_SIZE, 271, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, TabPanelTicketsLayout.createSequentialGroup()
-                                .addContainerGap()
+                            .addGroup(TabPanelTicketsLayout.createSequentialGroup()
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(btnAgregarTickets)))
                         .addGap(186, 186, 186))
                     .addGroup(TabPanelTicketsLayout.createSequentialGroup()
@@ -520,31 +455,32 @@ public class PanelServidor extends javax.swing.JFrame {
                         .addContainerGap()
                         .addComponent(ScrollPaneTicketsAmarillo))
                     .addGroup(TabPanelTicketsLayout.createSequentialGroup()
-                        .addGap(0, 146, Short.MAX_VALUE)
-                        .addComponent(btnAgregarTickets)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(TabPanelTicketsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(ScrollPaneRojo)
-                            .addComponent(ScrollPaneAmarillo)
-                            .addComponent(ScrollPaneVerde))
+                        .addGroup(TabPanelTicketsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(TabPanelTicketsLayout.createSequentialGroup()
+                                .addGap(60, 60, 60)
+                                .addComponent(jButton2)
+                                .addGroup(TabPanelTicketsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(TabPanelTicketsLayout.createSequentialGroup()
+                                        .addGap(151, 151, 151)
+                                        .addComponent(btnTicketsVerde)
+                                        .addGap(28, 28, 28)
+                                        .addComponent(btnTicketsAmarillo)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(btnTicketsRojo)
+                                        .addGap(0, 0, Short.MAX_VALUE))
+                                    .addGroup(TabPanelTicketsLayout.createSequentialGroup()
+                                        .addGap(92, 92, 92)
+                                        .addComponent(jScrollPane1))))
+                            .addGroup(TabPanelTicketsLayout.createSequentialGroup()
+                                .addGap(0, 146, Short.MAX_VALUE)
+                                .addComponent(btnAgregarTickets)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(TabPanelTicketsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(ScrollPaneRojo)
+                                    .addComponent(ScrollPaneAmarillo)
+                                    .addComponent(ScrollPaneVerde))))
                         .addGap(113, 113, 113)))
                 .addContainerGap())
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, TabPanelTicketsLayout.createSequentialGroup()
-                .addGap(60, 60, 60)
-                .addComponent(jButton2)
-                .addGroup(TabPanelTicketsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(TabPanelTicketsLayout.createSequentialGroup()
-                        .addGap(151, 151, 151)
-                        .addComponent(btnTicketsVerde)
-                        .addGap(28, 28, 28)
-                        .addComponent(btnTicketsAmarillo)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnTicketsRojo)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, TabPanelTicketsLayout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(ScrollPaneTicketsEstado, javax.swing.GroupLayout.PREFERRED_SIZE, 349, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(109, 109, 109))))
         );
 
         TabMonitoreo.addTab("Tickets", TabPanelTickets);
@@ -1025,19 +961,47 @@ public class PanelServidor extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_btnCerrarActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-        refrescarPanelEmpleados("Joaquin Mena", Categorias.VERDE,"8","12");
-        refrescarPanelEmpleados("Maria Castro", Categorias.ROJO,"12","6");
-        refrescarPanelEmpleados("Juan Hernandez", Categorias.AMARILLO,"20","45");
-    }//GEN-LAST:event_jButton1ActionPerformed
-
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
         refrescarPanelTicketsSinAsignar("T00 Maquina en mal estado");
         refrescarPanelTicketsSinAsignar("T01 No hay internet");
         refrescarPanelTicketsSinAsignar("T02 Monitor no enciene");
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void ListaConexionEmpleadosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ListaConexionEmpleadosMouseClicked
+        // TODO add your handling code here:
+        int seleccion = ListaConexionEmpleados.getSelectedIndex();
+        if(seleccion!=-1){
+            Empleado empleado = modeloEmpleado.getEmpleado(seleccion);
+            String categoria = empleado.getCategoria();
+                    String path;
+                    URL url = null;
+                    ImageIcon icon;
+                    if(null == categoria){
+                        path = "/imagenes/iconGris.png";
+                        iconCategoria.setIcon(new ImageIcon("imagenes/iconGris.jpg"));
+                    }
+                    else switch (categoria) {
+                        case "VERDE":
+                            path = "/imagenes/iconVerde.jpg";            
+                            break;
+                        case "AMARILLO":
+                            path = "/imagenes/iconAmarillo.jpg";             
+                            break;
+                        default:
+                            path = "/imagenes/iconRojo.jpg";               
+                            break;
+                    }
+                    url = this.getClass().getResource(path);
+                    icon = new ImageIcon(url);
+                    iconCategoria.setIcon(icon);
+                    iconCategoria.repaint();
+                    
+                    txtTicketsResueltos.setText(empleado.getTicketsResueltos());
+                    txtTicketsPendientes.setText(empleado.getTicketsPendientes());
+            
+        }
+    }//GEN-LAST:event_ListaConexionEmpleadosMouseClicked
 
     /**
      * @param args the command line arguments
@@ -1081,14 +1045,14 @@ public class PanelServidor extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> ComboBoxEncargados;
     private javax.swing.JComboBox<String> ComboBoxFiltroCategoria;
     private javax.swing.JComboBox<String> ComboBoxFiltroEstado;
-    private javax.swing.JPanel PanelConexionesEmpleados;
+    private javax.swing.JList<String> ListaConexionEmpleados;
+    private javax.swing.JList<String> ListaTickets;
     private javax.swing.JPanel PanelConexionesEstado;
     private javax.swing.JPanel PanelConfigAmarillo;
     private javax.swing.JPanel PanelConfigRojo;
     private javax.swing.JPanel PanelConfigVerde;
     private javax.swing.JPanel PanelConsultas;
     private javax.swing.JPanel PanelConsultasTickets;
-    private javax.swing.JPanel PanelContornoEstados;
     private javax.swing.JPanel PanelMonitoreoActividades;
     private javax.swing.JPanel PanelMonitoreoConexiones;
     private javax.swing.JPanel PanelMonitoreoTickets;
@@ -1104,7 +1068,6 @@ public class PanelServidor extends javax.swing.JFrame {
     private javax.swing.JScrollPane ScrollPaneRojo;
     private javax.swing.JScrollPane ScrollPaneTickets;
     private javax.swing.JScrollPane ScrollPaneTicketsAmarillo;
-    private javax.swing.JScrollPane ScrollPaneTicketsEstado;
     private javax.swing.JScrollPane ScrollPaneVerde;
     private javax.swing.JSpinner Spinner1;
     private javax.swing.JSpinner Spinner2;
@@ -1125,11 +1088,12 @@ public class PanelServidor extends javax.swing.JFrame {
     private javax.swing.JButton btnTicketsRojo;
     private javax.swing.JButton btnTicketsVerde;
     private javax.swing.JLabel iconCategoria;
-    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
-    private com.toedter.calendar.JDateChooser jDateChooserActivoDesde;
     private com.toedter.calendar.JDateChooser jDateChooserFiltroDesde;
     private com.toedter.calendar.JDateChooser jDateChooserFiltroHasta;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private java.awt.Label labelCategoria;
     private javax.swing.JLabel labelDesde;
     private javax.swing.JLabel labelEncargado;
