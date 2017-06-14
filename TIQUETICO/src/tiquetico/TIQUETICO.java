@@ -33,8 +33,8 @@ public class TIQUETICO {
         //boolean rest=ControladorLogin.peticionConectarEmpleado("Joaquin", "1234");
         //System.out.println(rest);
         //ControladorCliente.peticionSolicitarTicket("VERDE");
-        ModeloTiempo md = new ModeloTiempo();
-        md.iniciarProceso();
+        ControladorCliente.peticionReporteTicketsLiberados("jmena");
+
     }
     
 }

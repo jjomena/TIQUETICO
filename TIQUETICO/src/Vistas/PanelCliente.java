@@ -923,7 +923,7 @@ public class PanelCliente extends javax.swing.JFrame {
     
     /*Permite actualizar la informacion de Reporte de tickets*/
     public void consultarReportes(String Usuario){
-        ControladorCliente.peticionReporteTickets(Usuario);
+        ControladorCliente.peticionReporteTicketsResueltos(Usuario);
     }
     
     public void agregarTicketPendiente(String numTicket,String problema,

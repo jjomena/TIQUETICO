@@ -152,10 +152,10 @@ public class ControladorCliente {
         return "true".equals(cadena);
     }
     
-    public static void peticionReporteTickets(String idUsuario){
+    public static void peticionReporteTicketsLiberados(String idUsuario){
         String sentencia;
         sentencia = "REPORTE_TICKET ["+idUsuario+"]";
-        String respuesta = "REPORTE_TICKET [idTicket<idCliente<asunto<ingresoTicket<"
+        String respuesta = "REPORTE_TICKET [LIBERADOS#idTicket<idCliente<asunto<ingresoTicket<"
                 + "inicioAtencionTicket<tiempoResolucion<categoría<comentario<"
                 + "estado/idTicket<idCliente<asunto<ingresoTicket<"
                 + "inicioAtencionTicket<tiempoResolucion<categoría<comentario<"
@@ -166,7 +166,7 @@ public class ControladorCliente {
         String cadena = "";
         for (int i=0; i< respuesta.length(); i++){
             char car = respuesta.charAt(i);
-            if('[' ==car){
+            if('#' ==car){
                 bandera=!bandera; 
                 cadena =respuesta.substring(i+1, respuesta.length()-1);
                 String[] words=cadena.split("/");
@@ -178,7 +178,35 @@ public class ControladorCliente {
         }
     }
     
+    public static void peticionReporteTicketsResueltos(String idUsuario){
+        String sentencia;
+        sentencia = "REPORTE_TICKET ["+idUsuario+"]";
+        String respuesta = "REPORTE_TICKET [RESUELTOS#idTicket<idCliente<asunto<ingresoTicket<"
+                + "inicioAtencionTicket<tiempoResolucion<categoría<comentario<"
+                + "estado/idTicket<idCliente<asunto<ingresoTicket<"
+                + "inicioAtencionTicket<tiempoResolucion<categoría<comentario<"
+                + "estado/idTicket<idCliente<asunto<ingresoTicket<inicioAtencionTicket<"
+                + "tiempoResolucion<categoría<comentario<estado]";
+        boolean bandera=false;
+        //
+        String cadena = "";
+        for (int i=0; i< respuesta.length(); i++){
+            char car = respuesta.charAt(i);
+            if('#' ==car){
+                bandera=!bandera; 
+                cadena =respuesta.substring(i+1, respuesta.length()-1);
+                String[] words=cadena.split("/");
+                for(String w:words){
+                    informacionReporteTicket(w);
+                }
+                break;
+            }
+        }
+    }
+    
+    
     public static void informacionReporteTicket(String ticket){
+        System.out.println(ticket);
         String[] infoTicket=ticket.split("<");
         String idTicket = infoTicket[0];
         String idCliente = infoTicket[1];
@@ -190,8 +218,8 @@ public class ControladorCliente {
         String comentario = infoTicket[7];
         String estado = infoTicket[8];
         //
-        PanelCliente cliente = PanelCliente.getInstance();
-        cliente.agregarReporteTicket(idTicket, idCliente, tiempo, ingresoTicket, inicioAtencio, tiempo, categoria, comentario, estado);
+        //PanelCliente cliente = PanelCliente.getInstance();
+        //cliente.agregarReporteTicket(idTicket, idCliente, tiempo, ingresoTicket, inicioAtencio, tiempo, categoria, comentario, estado);
         
     }
 }
