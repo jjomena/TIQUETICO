@@ -36,7 +36,7 @@ public class PanelCliente extends javax.swing.JFrame {
     /**
      * Creates new form PanelCliente
      */
-    public PanelCliente() {
+    private PanelCliente() {
         this.setUndecorated(true);
         initComponents();
         ListaTicketsPendientes.setModel(modeloTickets);

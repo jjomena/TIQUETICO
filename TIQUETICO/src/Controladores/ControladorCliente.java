@@ -49,7 +49,7 @@ public class ControladorCliente {
     
     public static void peticionReservarTicket(String idUsuario,String idTicket){
         String sentencia;
-        sentencia = "RESERVAR_TICKET ["+idUsuario+"|"+idTicket+"]";
+        sentencia = "RESERVAR_TICKET ["+idUsuario+"<"+idTicket+"]";
         String respuesta = "RESERVAR_TICKET [true#idTicket<idCliente<asunto<ingresoTicket<ingresoAtenciónTicket]";
         boolean bandera=false;
         String peticion = "";
@@ -96,7 +96,7 @@ public class ControladorCliente {
     
     public static boolean peticionResolverTicket(String idUsuario,String idTicket,String comentario,String tiempo){
         String sentencia;
-        sentencia = "ACTUALIZAR_TICKET ["+idUsuario+"|"+idTicket+"|"+comentario+"|"+tiempo+"]";
+        sentencia = "ACTUALIZAR_TICKET ["+idUsuario+"<"+idTicket+"<"+comentario+"<"+tiempo+"]";
         String respuesta = "ACTUALIZAR_TICKET [true]";
         boolean bandera=false;
         String cadena = "";
@@ -116,7 +116,7 @@ public class ControladorCliente {
     
     public static boolean peticionLiberarTicket(String idUsuario,String idTicket,String comentario,String tiempo){
         String sentencia;
-        sentencia = "LIBERAR_TICKET ["+idUsuario+"|"+idTicket+"|"+comentario+"|"+tiempo+"]";
+        sentencia = "LIBERAR_TICKET ["+idUsuario+"<"+idTicket+"<"+comentario+"<"+tiempo+"]";
         String respuesta = "LIBERAR_TICKET [true]";
         boolean bandera=false;
         String cadena = "";
