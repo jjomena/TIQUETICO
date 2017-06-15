@@ -10,7 +10,6 @@ import tiquetico.Categorias;
  * @author Joaquín
  */
 public class ControladorCliente {
-    ComunicadorCliente comunicador;
     
     public ControladorCliente(){
     }
