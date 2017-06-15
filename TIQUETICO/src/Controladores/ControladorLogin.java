@@ -14,10 +14,6 @@ public class ControladorLogin {
     public static boolean peticionConectarEmpleado(String usuario,String password){
         String sentencia;
         sentencia = "CONECTAR_EMPLEADO ["+usuario+"<"+password+"]";
-        
-        //realiza consulta
-        
-        
         String respuesta="CONECTAR_EMPLEADO [true]";//AQUI VA EL METODO QUE ENVIA AL SERVIDOR, esto es un ejemplo como se espera respuesta
         boolean bandera=false;
         String cadena = "";

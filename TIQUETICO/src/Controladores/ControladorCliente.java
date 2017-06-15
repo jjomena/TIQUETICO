@@ -2,6 +2,7 @@
 package Controladores;
 
 import Vistas.PanelCliente;
+import java.io.IOException;
 import tiquetico.Categorias;
 
 /**
@@ -9,19 +10,29 @@ import tiquetico.Categorias;
  * @author Joaquín
  */
 public class ControladorCliente {
+    ComunicadorCliente comunicador;
     
     public ControladorCliente(){
     }
-    
-    public static void peticionSolicitarTicket(String COLOR){
+        
+    public static void peticionSolicitarTicket(String COLOR) throws IOException{
+        ComunicadorCliente conexion = ComunicadorCliente.getInstance();
         String sentencia;
         sentencia = "SOLICITAR_TICKETS ["+COLOR+"]";
-        String respuesta="SOLICITAR_TICKET [COLOR#numTicket<problem<idCliente<"
-                + "fechaIngreso/numTicket<problem<idCliente<fechaIngreso/numTicket<"
-                + "problem<idCliente<fechaIngreso]"; //AQUI VA EL METODO QUE ENVIA AL SERVIDOR, esto es un ejemplo como se espera respuesta
+        String respuesta="";
+        conexion.enviarMensaje(sentencia);
+        try {
+            Thread.sleep(4000);
+            respuesta = conexion.retornarRespuesta();
+        } catch (InterruptedException ex) {
+        }
+        
+        //String respuesta="SOLICITAR_TICKET [COLOR#numTicket<problem<idCliente<"
+              //  + "fechaIngreso/numTicket<problem<idCliente<fechaIngreso/numTicket<"
+               // + "problem<idCliente<fechaIngreso]"; //AQUI VA EL METODO QUE ENVIA AL SERVIDOR, esto es un ejemplo como se espera respuesta
         boolean bandera=false;
         //
-        String cadena = "";
+        String cadena ="";
         for (int i=0; i< respuesta.length(); i++){
             char car = respuesta.charAt(i);
             if('#' ==car){
@@ -47,10 +58,18 @@ public class ControladorCliente {
         cliente.agregarTicketPendiente(numTicket, problema, idCliente, fechaIngreso,COLOR);
     }
     
-    public static void peticionReservarTicket(String idUsuario,String idTicket){
+    public static void peticionReservarTicket(String idUsuario,String idTicket) throws IOException{
+        ComunicadorCliente conexion = ComunicadorCliente.getInstance();
         String sentencia;
-        sentencia = "RESERVAR_TICKET ["+idUsuario+"<"+idTicket+"]";
-        String respuesta = "RESERVAR_TICKET [true#idTicket<idCliente<asunto<ingresoTicket<ingresoAtenciónTicket]";
+        sentencia = "RESERVAR_TICKET ["+idUsuario+"<"+idTicket+"]";  
+        String respuesta="";
+        conexion.enviarMensaje(sentencia);
+        try {
+            Thread.sleep(4000);
+            respuesta = conexion.retornarRespuesta();
+        } catch (InterruptedException ex) {
+        }
+        //String respuesta = "RESERVAR_TICKET [true#idTicket<idCliente<asunto<ingresoTicket<ingresoAtenciónTicket]";
         boolean bandera=false;
         String peticion = "";
         String cadena = "";
@@ -94,10 +113,18 @@ public class ControladorCliente {
     }
     
     
-    public static boolean peticionResolverTicket(String idUsuario,String idTicket,String comentario,String tiempo){
+    public static boolean peticionResolverTicket(String idUsuario,String idTicket,String comentario,String tiempo) throws IOException{
+        ComunicadorCliente conexion = ComunicadorCliente.getInstance();
         String sentencia;
         sentencia = "ACTUALIZAR_TICKET ["+idUsuario+"<"+idTicket+"<"+comentario+"<"+tiempo+"]";
-        String respuesta = "ACTUALIZAR_TICKET [true]";
+        String respuesta="";
+        conexion.enviarMensaje(sentencia);
+        try {
+            Thread.sleep(4000);
+            respuesta = conexion.retornarRespuesta();
+        } catch (InterruptedException ex) {
+        }
+        //String respuesta = "ACTUALIZAR_TICKET [true]";
         boolean bandera=false;
         String cadena = "";
         for (int i=0; i< respuesta.length(); i++){
@@ -114,10 +141,18 @@ public class ControladorCliente {
         
     }
     
-    public static boolean peticionLiberarTicket(String idUsuario,String idTicket,String comentario,String tiempo){
+    public static boolean peticionLiberarTicket(String idUsuario,String idTicket,String comentario,String tiempo) throws IOException{
+        ComunicadorCliente conexion = ComunicadorCliente.getInstance();
         String sentencia;
         sentencia = "LIBERAR_TICKET ["+idUsuario+"<"+idTicket+"<"+comentario+"<"+tiempo+"]";
-        String respuesta = "LIBERAR_TICKET [true]";
+        String respuesta="";
+        conexion.enviarMensaje(sentencia);
+        try {
+            Thread.sleep(4000);
+            respuesta = conexion.retornarRespuesta();
+        } catch (InterruptedException ex) {
+        }
+        //String respuesta = "LIBERAR_TICKET [true]";
         boolean bandera=false;
         String cadena = "";
         for (int i=0; i< respuesta.length(); i++){
@@ -133,10 +168,18 @@ public class ControladorCliente {
         return "true".equals(cadena);
     }
     
-    public static boolean peticionCerrarConexion(String idUsuario){
-       String sentencia;
-       sentencia = "DESCONECTAR_EMPLEADO ["+idUsuario+"]";
-       String respuesta = "DESCONECTAR_EMPLEADO [true]";
+    public static boolean peticionCerrarConexion(String idUsuario) throws IOException{
+        ComunicadorCliente conexion = ComunicadorCliente.getInstance();
+        String sentencia;
+        sentencia = "DESCONECTAR_EMPLEADO ["+idUsuario+"]";
+        String respuesta="";
+        conexion.enviarMensaje(sentencia);
+        try {
+            Thread.sleep(4000);
+            respuesta = conexion.retornarRespuesta();
+        } catch (InterruptedException ex) {
+        }
+       //String respuesta = "DESCONECTAR_EMPLEADO [true]";
        boolean bandera=false;
         String cadena = "";
         for (int i=0; i< respuesta.length(); i++){
@@ -152,15 +195,23 @@ public class ControladorCliente {
         return "true".equals(cadena);
     }
     
-    public static void peticionReporteTicketsLiberados(String idUsuario){
+    public static void peticionReporteTicketsLiberados(String idUsuario) throws IOException{
+        ComunicadorCliente conexion = ComunicadorCliente.getInstance();
         String sentencia;
         sentencia = "REPORTE_TICKET ["+idUsuario+"]";
-        String respuesta = "REPORTE_TICKET [LIBERADOS#idTicket<idCliente<asunto<ingresoTicket<"
-                + "inicioAtencionTicket<tiempoResolucion<categoría<comentario<"
-                + "estado/idTicket<idCliente<asunto<ingresoTicket<"
-                + "inicioAtencionTicket<tiempoResolucion<categoría<comentario<"
-                + "estado/idTicket<idCliente<asunto<ingresoTicket<inicioAtencionTicket<"
-                + "tiempoResolucion<categoría<comentario<estado]";
+        String respuesta="";
+        conexion.enviarMensaje(sentencia);
+        try {
+            Thread.sleep(4000);
+            respuesta = conexion.retornarRespuesta();
+        } catch (InterruptedException ex) {
+        }
+        //String respuesta = "REPORTE_TICKET [LIBERADOS#idTicket<idCliente<asunto<ingresoTicket<"
+               // + "inicioAtencionTicket<tiempoResolucion<categoría<comentario<"
+               // + "estado/idTicket<idCliente<asunto<ingresoTicket<"
+                //+ "inicioAtencionTicket<tiempoResolucion<categoría<comentario<"
+                //+ "estado/idTicket<idCliente<asunto<ingresoTicket<inicioAtencionTicket<"
+                //+ "tiempoResolucion<categoría<comentario<estado]";
         boolean bandera=false;
         //
         String cadena = "";
@@ -178,15 +229,23 @@ public class ControladorCliente {
         }
     }
     
-    public static void peticionReporteTicketsResueltos(String idUsuario){
+    public static void peticionReporteTicketsResueltos(String idUsuario) throws IOException{
+        ComunicadorCliente conexion = ComunicadorCliente.getInstance();
         String sentencia;
         sentencia = "REPORTE_TICKET ["+idUsuario+"]";
-        String respuesta = "REPORTE_TICKET [RESUELTOS#idTicket<idCliente<asunto<ingresoTicket<"
-                + "inicioAtencionTicket<tiempoResolucion<categoría<comentario<"
-                + "estado/idTicket<idCliente<asunto<ingresoTicket<"
-                + "inicioAtencionTicket<tiempoResolucion<categoría<comentario<"
-                + "estado/idTicket<idCliente<asunto<ingresoTicket<inicioAtencionTicket<"
-                + "tiempoResolucion<categoría<comentario<estado]";
+        String respuesta="";
+        conexion.enviarMensaje(sentencia);
+        try {
+            Thread.sleep(4000);
+            respuesta = conexion.retornarRespuesta();
+        } catch (InterruptedException ex) {
+        }
+        //String respuesta = "REPORTE_TICKET [RESUELTOS#idTicket<idCliente<asunto<ingresoTicket<"
+          //      + "inicioAtencionTicket<tiempoResolucion<categoría<comentario<"
+            //    + "estado/idTicket<idCliente<asunto<ingresoTicket<"
+              //  + "inicioAtencionTicket<tiempoResolucion<categoría<comentario<"
+                //+ "estado/idTicket<idCliente<asunto<ingresoTicket<inicioAtencionTicket<"
+                //+ "tiempoResolucion<categoría<comentario<estado]";
         boolean bandera=false;
         //
         String cadena = "";
@@ -218,8 +277,8 @@ public class ControladorCliente {
         String comentario = infoTicket[7];
         String estado = infoTicket[8];
         //
-        //PanelCliente cliente = PanelCliente.getInstance();
-        //cliente.agregarReporteTicket(idTicket, idCliente, tiempo, ingresoTicket, inicioAtencio, tiempo, categoria, comentario, estado);
+        PanelCliente cliente = PanelCliente.getInstance();
+        cliente.agregarReporteTicket(idTicket, idCliente, tiempo, ingresoTicket, inicioAtencio, tiempo, categoria, comentario, estado);
         
     }
 }

@@ -1,6 +1,9 @@
 package Vistas;
 
 import Controladores.ControladorConexion;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Conectar extends javax.swing.JFrame {
     private String dirrecion;
@@ -185,7 +188,13 @@ public class Conectar extends javax.swing.JFrame {
 
         dirrecion = txtDireccion.getText();
         puerto = txtPuerto.getText();
-        ControladorConexion.conectarServidor(dirrecion, puerto);
+        try {
+            ControladorConexion.conectarServidor(dirrecion,puerto);
+            Login login = new Login();
+            login.show();
+        } catch (IOException ex) {
+            Logger.getLogger(Conectar.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btnConectarActionPerformed
 
     /**

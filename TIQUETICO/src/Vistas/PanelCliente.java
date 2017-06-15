@@ -14,7 +14,10 @@ import Modelos.Ticket;
 import java.awt.GridLayout;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.IOException;
 import java.net.URL;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
@@ -741,34 +744,50 @@ public class PanelCliente extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarActionPerformed
-        // TODO add your handling code here:
+
         this.dispose();
     }//GEN-LAST:event_btnCerrarActionPerformed
 
     private void btnLiberarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLiberarActionPerformed
 
-        mensajeLiberarTicket(); 
+        try { 
+            mensajeLiberarTicket();
+        } catch (IOException ex) {
+            Logger.getLogger(PanelCliente.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btnLiberarActionPerformed
 
     private void btnResueltoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResueltoActionPerformed
-        // TODO add your handling code here:
-        mensajeTicketResuelto();
+        try {
+            mensajeTicketResuelto();
+        } catch (IOException ex) {
+            Logger.getLogger(PanelCliente.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btnResueltoActionPerformed
 
     private void btnAtenderTicketActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAtenderTicketActionPerformed
         // Boton en el que el usuario solicita reservar un ticket para ser atendido
         String usuario = txtNombreUsuario.getText();
         String ticket = txtPendienteIdTicket.getText();
-        mensajeTicketEnAtencion(ticket,usuario); //Mensaje de confirmacion.
-        //ControladorCliente.peticionReservarTicket(usuario, ticket);
+        try {
+            mensajeTicketEnAtencion(ticket,usuario); //Mensaje de confirmacion.
+            //ControladorCliente.peticionReservarTicket(usuario, ticket);
+        } catch (IOException ex) {
+            Logger.getLogger(PanelCliente.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btnAtenderTicketActionPerformed
 
     private void btnDesconectarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDesconectarActionPerformed
         //Envia solicitud para abandonar la conexion con el servidor
         String idUsuario=txtNombreUsuario.getText();
-        boolean ejecutar=ControladorCliente.peticionCerrarConexion(idUsuario);
+        boolean ejecutar=false;
+        try {
+            ejecutar = ControladorCliente.peticionCerrarConexion(idUsuario);
+        } catch (IOException ex) {
+            Logger.getLogger(PanelCliente.class.getName()).log(Level.SEVERE, null, ex);
+        }
         if(ejecutar){
-            //Cerrar conexion
+            System.out.println("SE CERRO LA CONEXION");
         }
     }//GEN-LAST:event_btnDesconectarActionPerformed
 
@@ -790,24 +809,36 @@ public class PanelCliente extends javax.swing.JFrame {
     }//GEN-LAST:event_ListaTicketsPendientesMouseClicked
 
     private void semaforoArribaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_semaforoArribaMouseClicked
-        // TODO add your handling code here:
+
         limpiarListaTicketsPendientes();
         modificarEstadoSemaforo("ROJO");
-        consultarTickets("ROJO");
+        try {
+            consultarTickets("ROJO");
+        } catch (IOException ex) {
+            Logger.getLogger(PanelCliente.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_semaforoArribaMouseClicked
 
     private void semaforoMedioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_semaforoMedioActionPerformed
         // TODO add your handling code here:
         limpiarListaTicketsPendientes();
         modificarEstadoSemaforo("AMARILLO");
-        consultarTickets("AMARILLO");
+        try {
+            consultarTickets("AMARILLO");
+        } catch (IOException ex) {
+            Logger.getLogger(PanelCliente.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_semaforoMedioActionPerformed
 
     private void semaforoAbajoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_semaforoAbajoActionPerformed
         // TODO add your handling code here:
         limpiarListaTicketsPendientes();
         modificarEstadoSemaforo("VERDE");
-        consultarTickets("VERDE");
+        try {
+            consultarTickets("VERDE");
+        } catch (IOException ex) {
+            Logger.getLogger(PanelCliente.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_semaforoAbajoActionPerformed
 
     private void btnPauseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPauseActionPerformed
@@ -837,7 +868,7 @@ public class PanelCliente extends javax.swing.JFrame {
     }//GEN-LAST:event_ListaReporteTicketsMouseClicked
 
     /*Mensaje que confirma que el usuario desea reservar un ticket*/
-    public void mensajeTicketEnAtencion(String ticket,String usuario){
+    public void mensajeTicketEnAtencion(String ticket,String usuario) throws IOException{
         Object[] options = {"SI","NO"};
         JDialog.setDefaultLookAndFeelDecorated(true);
         int respuesta = JOptionPane.showOptionDialog(null,"Está seguro que desea atender el ticket "+ticket,"Atención",
@@ -858,7 +889,7 @@ public class PanelCliente extends javax.swing.JFrame {
     }
     
     /*Mensaje que pregunta si desea liberar un ticket*/
-    public void mensajeLiberarTicket(){
+    public void mensajeLiberarTicket() throws IOException{
         Object[] options = {"SI","NO"};
         JDialog.setDefaultLookAndFeelDecorated(true);
         int respuesta = JOptionPane.showOptionDialog(null,"Está seguro que desea liberar el ticket?","Atención",
@@ -884,7 +915,7 @@ public class PanelCliente extends javax.swing.JFrame {
     }
     
     /*Muestra un mensaje cuando se desea colocar un ticket como resuelto*/
-    public void mensajeTicketResuelto(){
+    public void mensajeTicketResuelto() throws IOException{
         Object[] options = {"SI","NO"};
         JDialog.setDefaultLookAndFeelDecorated(true);
         int respuesta = JOptionPane.showOptionDialog(null,"Confirmar Ticket como Resuelto","Atención",
@@ -917,12 +948,12 @@ public class PanelCliente extends javax.swing.JFrame {
     }
     
     /*Permite actualizar la informacion de Tickets Pendientes*/
-    public void consultarTickets(String COLOR){
+    public void consultarTickets(String COLOR) throws IOException{
         ControladorCliente.peticionSolicitarTicket(COLOR);
     }
     
     /*Permite actualizar la informacion de Reporte de tickets*/
-    public void consultarReportes(String Usuario){
+    public void consultarReportes(String Usuario) throws IOException{
         ControladorCliente.peticionReporteTicketsResueltos(Usuario);
     }
     
